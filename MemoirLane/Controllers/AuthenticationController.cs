@@ -45,10 +45,9 @@ namespace MemoirLane.Controllers
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
             var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, user.Username),
-        new Claim(ClaimTypes.Role, user.Role.ToString())
-    };
+        {
+            new Claim(ClaimTypes.Name, user.Username),
+        };
 
             var tokenOptions = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
@@ -59,7 +58,7 @@ namespace MemoirLane.Controllers
             );
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            return Ok(new { Token = tokenString, Role = user.Role });
+            return Ok(new { Token = tokenString, Username = user.Username, User_Id = user.Id });
         }
 
         [HttpPost("register")]
